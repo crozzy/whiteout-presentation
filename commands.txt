@@ -1,0 +1,3 @@
+docker build -f wo_1.Dockerfile .
+IMAGE={{IMAGE}};for l in $(docker save $IMAGE | tar -tf - *layer.tar); do printf "${RED}--$l--${NC}\n"; docker save $IMAGE | tar -xf - $l --to-stdout | tar -tf - | paths2indent | indent2tree; done
+docker save -o whiteout && ./clair-action report --db-path={{PATH TO DB}} --image-path=whiteout --format=quay | jq

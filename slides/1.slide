@@ -1,0 +1,38 @@
+Whiteouts in Container Images
+2022/11/09
+
+Crozzy
+* Tipp-Ex
+.image images/tippex.jpg
+
+* Introduction
+- Anatomy of a container image
+- OCI Spec
+- Why it's important for Clair
+
+* Anatomy of a container image
+- Layers, manifest, index and config*
+- Layers make use of Copy on Write technique*
+- Add/Modification
+
+* Dalí's Mae West - Side
+.image images/mae_west_side.jpg 400 500
+
+* Dalí's Mae West - Front
+.image images/mae_west.jpg 400 500
+
+* OCI Spec
+- https://github.com/opencontainers/image-spec/blob/main/layer.md#whiteouts
+- Empty file with special name 
+- Prefixed with .wh.
+- Once applied must be hidden
+- Only apply to lower/parent layers
+- Files that appear in the same layer as whiteout file can only be hidden by whiteouts in subsequent layers
+- When applied to dir all child dirs and files should be deleted from subsequent layers
+
+* Why is this important for Clair
+- Clair indexes layers in separate units of work
+- This allows Clair to deduplicate a lot of work by only needing to index base image layers once
+- It also allows use to divide up work better which is very important for distributed systems.
+- The problem is when you encounter references that are defined in one layer and applied to others.
+- Urllib3 example.
